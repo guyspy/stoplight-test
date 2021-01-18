@@ -28,6 +28,8 @@ properties:
     description: 我在這篇物件中的反應
   reactions:
     type: array
+    uniqueItems: false
+    maxItems: 1
     items:
       type: object
       properties:
@@ -37,5 +39,7 @@ properties:
             - LIKE
           description: 類型，例如 LIKE 代表是讚
         count:
-          type: number
+          type: integer
           description: 多少人按讚
+          default: 0
+          minimum: 0
