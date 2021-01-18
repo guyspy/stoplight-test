@@ -1,0 +1,29 @@
+title: Reaction
+x-tags:
+  - user
+  - PO
+description: '使用者按讚、怒等情緒記錄資料。appId + userId + entityId + entityType 合起來必須是 unique 的 '
+x-examples:
+  example-like:
+    id: cd8f927c-39bf-421a-b8de-16e827122f5e
+    appId: xQxVOf8zcK
+    userId: '232874632'
+    entityId: b8929555-ee79-48cf-832a-dd2d023eb086
+    entityType: post
+    type: LIKE
+    createdTime: '2019-08-24T14:15:22Z'
+    lastModifiedTime: '2019-08-24T14:15:22Z'
+allOf:
+  - $ref: ./BaseUserContentModel.v1.yaml
+  - type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - LIKE
+          - LOVE
+          - WOW
+          - HAHA
+          - SORRY
+          - ANGRY
+        description: 讚、怒、大笑等等，目前只需要實作 讚 (LIKE)

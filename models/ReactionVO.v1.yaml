@@ -1,0 +1,39 @@
+title: ReactionVO
+type: object
+description: 按讚與是否按過讚的資料
+x-examples:
+  我有按讚:
+    entityType: string
+    entityId: string
+    myReaction: LIKE
+    reactions:
+      - type: LIKE
+        count: 123
+  我沒有按讚:
+    entityType: string
+    entityId: string
+    myReaction: NONE
+    reactions:
+      - type: LIKE
+        count: 134
+x-tags:
+  - user
+  - VO
+properties:
+  myReaction:
+    type: string
+    enum:
+      - LIKE
+      - NONE
+    description: 我在這篇物件中的反應
+  reactions:
+    type: array
+    items:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - LIKE
+        count:
+          type: number

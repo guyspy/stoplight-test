@@ -1,0 +1,26 @@
+title: AppACL
+allOf:
+  - $ref: ./BaseModel.v1.yaml
+  - type: object
+    properties:
+      userId:
+        type: string
+        description: bf! user id
+      role:
+        type: string
+        enum:
+          - ADMIN
+        description: 這個使用者目前的角色。這個階段只需要實作「管理員」（ADMIN）
+      state:
+        type: string
+        enum:
+          - ACTIVE
+          - DISABLED
+        description: 目前該員的狀態（是否停權等）
+    required:
+      - userId
+      - role
+      - state
+description: 紀錄各個 App 有哪些使用者可以當管理員。這些使用者登入後可以用其自己的 access_token 來呼叫該星球的管理 api
+x-tags:
+  - PO

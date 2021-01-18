@@ -1,0 +1,14 @@
+title: Comment
+x-tags:
+  - user
+  - PO
+allOf:
+  - $ref: ./BaseUserContentModel.v1.yaml
+  - type: object
+    properties:
+      content:
+        type: string
+        description: 留言內容主體
+    required:
+      - content
+description: 留言本身

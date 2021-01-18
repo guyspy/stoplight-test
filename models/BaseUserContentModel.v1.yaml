@@ -1,0 +1,20 @@
+allOf:
+  - $ref: ./BaseModel.v1.yaml
+  - type: object
+    properties:
+      appId:
+        type: string
+        description: 每個星球會有自己的 appId
+      userId:
+        type: string
+        description: bf! user id
+      entityId:
+        type: string
+        description: 被作動的物件 id
+      entityType:
+        type: string
+        description: entityId 的資料型別，由 api 呼叫者自訂
+x-examples: {}
+description: 本服務最主要的 parent class model：代表使用者產生的資料
+x-tags:
+  - PO

@@ -1,0 +1,20 @@
+title: BaseModel
+type: object
+x-examples: {}
+properties:
+  id:
+    type: string
+  createdTime:
+    type: string
+    format: date-time
+  lastModifiedTime:
+    type: string
+    format: date-time
+required:
+  - appId
+  - userId
+  - entityId
+  - entityType
+description: 最上層的 parent model class
+x-tags:
+  - PO

@@ -1,0 +1,210 @@
+openapi: 3.0.0
+info:
+  title: bf! social api
+  version: '1.0'
+  description: 一套彈性的萬用留言、按讚 API 服務，未來可直接重複利用，免去各種系統都需自行開發按讚留言功能的時間花費。
+  contact:
+    name: phsu
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/reaction/{type}/{entityType}/{entityId}':
+    parameters:
+      - schema:
+          type: string
+          example: like
+          enum:
+            - like
+        name: type
+        in: path
+        required: true
+        description: 情緒類型，目前只需要做按讚 (like)
+      - $ref: '#/components/parameters/entityType'
+      - $ref: '#/components/parameters/entityId'
+    post:
+      summary: 按讚
+      tags:
+        - user
+      responses:
+        '200':
+          $ref: '#/components/responses/ReactionResponse'
+      operationId: post-reaction-type-entityType-entityId
+      description: 按讚。不需檢查被按讚的對象是否存在（也不可能檢查）。永遠會成功呼叫本 API
+      parameters:
+        - $ref: '#/components/parameters/user_token'
+        - $ref: '#/components/parameters/appId'
+    delete:
+      summary: 移除讚
+      tags:
+        - user
+      responses:
+        '200':
+          $ref: '#/components/responses/ReactionResponse'
+      operationId: delete-reaction-type-entityType-entityId
+      description: 收回讚。不需要檢查符合的資料是否存在，一律回傳砍掉對應資料後的結果
+  '/reaction/{entityType}/{entityId}':
+    parameters:
+      - $ref: '#/components/parameters/entityType'
+      - $ref: '#/components/parameters/entityId'
+    get:
+      summary: 取得單篇物件的讚數
+      tags:
+        - user
+      responses:
+        '200':
+          $ref: '#/components/responses/ReactionResponse'
+      operationId: get-reaction-entityType-entityId
+      description: 取得特定物件的按讚總數，以及登入使用者是否讚過
+      parameters:
+        - $ref: '#/components/parameters/user_token'
+        - $ref: '#/components/parameters/appId'
+  '/reaction/{entityType}':
+    parameters:
+      - schema:
+          type: string
+        name: entityType
+        in: path
+        required: true
+    get:
+      summary: 取得多篇指定物件的讚數
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      $ref: ../models/ReactionVO.v1.yaml
+              examples:
+                example-response:
+                  value:
+                    list:
+                      - entityType: post
+                        entityId: postid1
+                        myReaction: LIKE
+                        reactions:
+                          - type: LIKE
+                            count: 325
+                      - entityType: post
+                        entityId: postid2
+                        myReaction: NONE
+                        reactions:
+                          - type: LIKE
+                            count: 3225
+      operationId: get-reaction-entityType
+      description: '以,隔開的 id 取得多篇物件的按讚數'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: entityIds
+          description: 逗點隔開多組 entityId
+        - $ref: '#/components/parameters/appId'
+  '/comment/{entityType}/{entityId}':
+    parameters:
+      - $ref: '#/components/parameters/entityType'
+      - $ref: '#/components/parameters/entityId'
+    get:
+      summary: 取得留言列表
+      tags:
+        - user
+      responses: {}
+      operationId: get-comment-entityType-entityId
+      description: ''
+      parameters:
+        - $ref: '#/components/parameters/appId'
+        - $ref: '#/components/parameters/user_token'
+    post:
+      summary: 產生新留言
+      tags:
+        - user
+      responses: {}
+      operationId: post-comment-entityType-entityId
+      parameters:
+        - $ref: '#/components/parameters/appId'
+        - $ref: '#/components/parameters/user_token'
+      description: ''
+components:
+  schemas: {}
+  securitySchemes: {}
+  responses:
+    ReactionResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: ../models/ReactionVO.v1.yaml
+              - type: object
+                properties:
+                  entityId:
+                    type: string
+                  entityType:
+                    type: string
+          examples:
+            我有按讚的回應:
+              value:
+                entityId: string
+                entityType: string
+                myReaction: LIKE
+                reactions:
+                  - type: LIKE
+                    count: 123
+            我沒有按讚的回應:
+              value:
+                entityId: string
+                entityType: string
+                myReaction: NONE
+                reactions:
+                  - type: LIKE
+                    count: 122
+    NotFound:
+      description: common not found response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              message:
+                type: string
+          examples: {}
+      headers: {}
+  parameters:
+    entityType:
+      name: entityType
+      in: path
+      required: true
+      schema:
+        type: string
+      description: 按讚對象的物件類型，由呼叫者自訂
+    entityId:
+      name: entityId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: 按讚對象的物件 id，由呼叫者自訂
+    user_token:
+      name: user_token
+      in: cookie
+      required: false
+      schema:
+        type: string
+      description: bf! 使用者登入後在瀏覽器中的 cookie (名稱尚不知道)
+    appId:
+      name: x-bf-app-id
+      in: header
+      required: false
+      schema:
+        type: string
+      description: appId 來區分呼叫者來自哪個星球的服務
+tags:
+  - name: user

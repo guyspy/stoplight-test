@@ -1,0 +1,23 @@
+title: UserVO
+type: object
+x-tags:
+  - user
+  - VO
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  avatar:
+    type: string
+    format: uri
+x-examples:
+  John Doe:
+    id: 72254b57-b27d-4218-89ce-ebc030540ca1
+    name: John Doe
+    avatar: 'https://placehold.it/300x300'
+  Jane Doe:
+    id: 25ffdc9b-baac-4387-8186-f165f64a6187
+    name: Jane Doe
+    avatar: 'https://placehold.it/300x300'
+description: bf! user model

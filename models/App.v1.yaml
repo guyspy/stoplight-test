@@ -1,0 +1,26 @@
+title: App
+type: object
+description: 紀錄有哪些可以使用本服務的 App
+x-tags:
+  - app
+  - PO
+properties:
+  id:
+    type: string
+  appId:
+    type: string
+    description: 亂數產生的 addId 字串，不重複。給串接者作為 api key 使用
+  appSecret:
+    type: string
+    description: 接受從來自 server side 打過來的 api 請求時使用的
+  state:
+    type: string
+    enum:
+      - ACTIVE
+      - DISABLED
+    description: |
+      這個 App 的狀態，可用或停用
+required:
+  - appId
+  - appSecret
+  - state
