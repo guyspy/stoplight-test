@@ -1,0 +1,11 @@
+allOf:
+  - $ref: ./ReactionVO.v1.yaml
+  - type: object
+    properties:
+      entityId:
+        type: string
+        description: 被作動的物件 id
+      entityType:
+        type: string
+        description: entityId 的資料型別，由 api 呼叫者自訂
+description: 加上物件id 與型別的按讚資料

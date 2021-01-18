@@ -80,7 +80,7 @@ paths:
                   list:
                     type: array
                     items:
-                      $ref: ../models/ReactionVO.v1.yaml
+                      $ref: ../models/ReactionEntityVO.v1.yaml
               examples:
                 example-response:
                   value:
@@ -140,13 +140,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: ../models/ReactionVO.v1.yaml
-              - type: object
-                properties:
-                  entityId:
-                    type: string
-                  entityType:
-                    type: string
+              - $ref: ../models/ReactionEntityVO.v1.yaml
           examples:
             我有按讚的回應:
               value:

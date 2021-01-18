@@ -35,5 +35,7 @@ properties:
           type: string
           enum:
             - LIKE
+          description: 類型，例如 LIKE 代表是讚
         count:
           type: number
+          description: 多少人按讚
