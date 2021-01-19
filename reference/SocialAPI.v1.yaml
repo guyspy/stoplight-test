@@ -136,22 +136,7 @@ paths:
                     type: number
                   nextCount:
                     type: number
-              examples:
-                example-1:
-                  value:
-                    list:
-                      - id: someId
-                        entityId: some_entity_id
-                        entityType: post
-                        author:
-                          id: some_author_id
-                          name: John Doe
-                          avatar: 'https://placehold.it/300x300'
-                        content: 好酷炫喔我也要！
-                        replies: []
-                    next: next_token
-                    prev: null
-                    nextCount: 1236
+              examples: {}
       operationId: get-comment-entityType-entityId
       description: 取得某個物件的留言列表
       parameters:
@@ -243,17 +228,53 @@ paths:
       summary: 取得回應列表
       tags:
         - user
-      responses: {}
       operationId: get-reply-commentId
       parameters:
         - $ref: '#/components/parameters/appId'
-      description: ''
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/show'
+        - $ref: '#/components/parameters/prev'
+        - $ref: '#/components/parameters/next'
+      description: 取得回應列表
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      $ref: ../models/CommentVO.v1.yaml
+                  next:
+                    type: string
+                  prev:
+                    type: string
+                  nextCount:
+                    type: integer
+                  prevCount:
+                    type: integer
     post:
       summary: 產生新的回應
       tags:
         - user
-      responses: {}
+      responses:
+        '200':
+          $ref: '#/components/responses/CommentResponse'
       operationId: post-reply-commentId
+      parameters:
+        - $ref: '#/components/parameters/appId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      description: 新增回應
 components:
   schemas: {}
   securitySchemes: {}
