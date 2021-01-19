@@ -10,4 +10,8 @@ allOf:
         type: string
         description: entityId 的資料型別，由 api 呼叫者自訂
         example: post
+      replyCount:
+        type: integer
+        minimum: 0
+        description: 這則內容的回應數
 description: 加上物件id 與型別的按讚資料

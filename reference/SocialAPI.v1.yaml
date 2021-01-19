@@ -136,7 +136,22 @@ paths:
                     type: number
                   nextCount:
                     type: number
-              examples: {}
+              examples:
+                example-1:
+                  value:
+                    list:
+                      - id: someId
+                        entityId: some_entity_id
+                        entityType: post
+                        author:
+                          id: some_author_id
+                          name: John Doe
+                          avatar: 'https://placehold.it/300x300'
+                        content: 好酷炫喔我也要！
+                        replies: []
+                    next: next_token
+                    prev: null
+                    nextCount: 1236
       operationId: get-comment-entityType-entityId
       description: 取得某個物件的留言列表
       parameters:
@@ -168,16 +183,16 @@ paths:
                   type: string
               required:
                 - content
-  '/comment/{entityType}/{entityId}/{id}':
+  '/comment/{entityType}/{entityId}/{commentId}':
     parameters:
-      - $ref: '#/components/parameters/entityType'
-      - $ref: '#/components/parameters/entityId'
       - schema:
           type: string
-        name: id
+        name: commentId
         in: path
         required: true
-        description: 留言自身的 id
+        description: 留言的 id
+      - $ref: '#/components/parameters/entityType'
+      - $ref: '#/components/parameters/entityId'
     delete:
       summary: 刪除既有的留言
       tags:
@@ -216,6 +231,29 @@ paths:
               properties:
                 content:
                   type: string
+  '/reply/{commentId}':
+    parameters:
+      - schema:
+          type: string
+        name: commentId
+        in: path
+        required: true
+        description: 留言的 id
+    get:
+      summary: 取得回應列表
+      tags:
+        - user
+      responses: {}
+      operationId: get-reply-commentId
+      parameters:
+        - $ref: '#/components/parameters/appId'
+      description: ''
+    post:
+      summary: 產生新的回應
+      tags:
+        - user
+      responses: {}
+      operationId: post-reply-commentId
 components:
   schemas: {}
   securitySchemes: {}
