@@ -275,6 +275,55 @@ paths:
                 content:
                   type: string
       description: 新增回應
+  '/reply/{commentId}/{replyId}':
+    parameters:
+      - schema:
+          type: string
+        name: commentId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: replyId
+        in: path
+        required: true
+    put:
+      summary: 更新既有的回應
+      tags:
+        - user
+      responses:
+        '200':
+          $ref: '#/components/responses/CommentResponse'
+      operationId: put-reply-commentId-replyId
+      description: 更新既有的回應
+      parameters:
+        - $ref: '#/components/parameters/appId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+    delete:
+      summary: 刪除回應
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: delete-reply-commentId-replyId
+      description: 刪除回應
+      parameters:
+        - $ref: '#/components/parameters/appId'
 components:
   schemas: {}
   securitySchemes: {}
