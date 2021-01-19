@@ -291,9 +291,6 @@ paths:
       summary: 更新既有的回應
       tags:
         - user
-      responses:
-        '200':
-          $ref: '#/components/responses/CommentResponse'
       operationId: put-reply-commentId-replyId
       description: 更新既有的回應
       parameters:
@@ -306,6 +303,13 @@ paths:
               properties:
                 content:
                   type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ../models/CommentVO.v1.yaml
     delete:
       summary: 刪除回應
       tags:
