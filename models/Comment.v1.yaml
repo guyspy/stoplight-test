@@ -9,6 +9,11 @@ allOf:
       content:
         type: string
         description: 留言內容主體
+      metas:
+        type: array
+        description: mention 的位置（未來也可支援 tag 等 inline 物件)
+        items:
+          type: object
     required:
       - content
 description: 留言本身
