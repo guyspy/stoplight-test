@@ -136,6 +136,7 @@ paths:
                     type: number
                   nextCount:
                     type: number
+              examples: {}
       operationId: get-comment-entityType-entityId
       description: 取得某個物件的留言列表
       parameters:
@@ -157,6 +158,64 @@ paths:
         - $ref: '#/components/parameters/appId'
         - $ref: '#/components/parameters/user_token'
       description: 為某個物件新增留言
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+  '/comment/{entityType}/{entityId}/{id}':
+    parameters:
+      - $ref: '#/components/parameters/entityType'
+      - $ref: '#/components/parameters/entityId'
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: 留言自身的 id
+    delete:
+      summary: 刪除既有的留言
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: success
+      operationId: delete-comment-entityType-entityId-id
+      description: 刪除留言。檢查使用者對該留言有足夠的刪除權限後才可以進行
+      parameters:
+        - $ref: '#/components/parameters/appId'
+    put:
+      summary: 更新既有的留言
+      tags:
+        - user
+      responses:
+        '200':
+          $ref: '#/components/responses/CommentResponse'
+      operationId: put-comment-entityType-entityId-id
+      description: 更新既有的留言。要判斷使用者有更新留言內容的權限
+      parameters:
+        - $ref: '#/components/parameters/appId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
 components:
   schemas: {}
   securitySchemes: {}
