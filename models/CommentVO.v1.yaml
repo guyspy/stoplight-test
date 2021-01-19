@@ -1,0 +1,12 @@
+allOf:
+  - $ref: ./ReactionVO.v1.yaml
+  - type: object
+    properties:
+      content:
+        type: string
+      entityId:
+        type: string
+      entityType:
+        type: string
+      author:
+        $ref: ./UserVO.v1.yaml
