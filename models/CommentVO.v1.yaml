@@ -10,3 +10,8 @@ allOf:
         type: string
       author:
         $ref: ./UserVO.v1.yaml
+      canEdit:
+        type: boolean
+      canDelete:
+        type: boolean
+  - $ref: ./BaseModel.v1.yaml
