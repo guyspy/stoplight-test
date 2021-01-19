@@ -1,0 +1,12 @@
+allOf:
+  - $ref: ./CommentVO.v1.yaml
+  - type: object
+    properties:
+      replies:
+        type: array
+        maxItems: 1
+        items:
+          $ref: ./CommentVO.v1.yaml
+      replyCount:
+        type: number
+        description: 此留言的回應數

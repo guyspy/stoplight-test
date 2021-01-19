@@ -114,22 +114,49 @@ paths:
       summary: 取得留言列表
       tags:
         - user
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      $ref: ../models/CommentWithRepliesVO.v1.yaml
+                  next:
+                    type: string
+                    description: next token 取得下一頁
+                  prev:
+                    type: string
+                    description: prev token 取得上一頁
+                  prevCount:
+                    type: number
+                  nextCount:
+                    type: number
       operationId: get-comment-entityType-entityId
-      description: ''
+      description: 取得某個物件的留言列表
       parameters:
         - $ref: '#/components/parameters/appId'
         - $ref: '#/components/parameters/user_token'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/show'
+        - $ref: '#/components/parameters/prev'
+        - $ref: '#/components/parameters/next'
     post:
       summary: 產生新留言
       tags:
         - user
-      responses: {}
+      responses:
+        '200':
+          $ref: '#/components/responses/CommentResponse'
       operationId: post-comment-entityType-entityId
       parameters:
         - $ref: '#/components/parameters/appId'
         - $ref: '#/components/parameters/user_token'
-      description: ''
+      description: 為某個物件新增留言
 components:
   schemas: {}
   securitySchemes: {}
@@ -171,6 +198,13 @@ components:
                 type: string
           examples: {}
       headers: {}
+    CommentResponse:
+      description: single comment response
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: ../models/CommentWithRepliesVO.v1.yaml
   parameters:
     entityType:
       name: entityType
@@ -200,5 +234,39 @@ components:
       schema:
         type: string
       description: appId 來區分呼叫者來自哪個星球的服務
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+      description: 排序方向
+    show:
+      name: show
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 10
+        minimum: 1
+        maximum: 1000
+      description: 顯示幾則
+    prev:
+      name: prev
+      in: query
+      required: false
+      schema:
+        type: string
+      description: 取得前一頁資料的 token
+    next:
+      name: next
+      in: query
+      required: false
+      schema:
+        type: string
+      description: 取得下一頁資料的 token
 tags:
   - name: user
