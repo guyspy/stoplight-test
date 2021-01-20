@@ -1,0 +1,407 @@
+{
+  "openapi": "3.0.0",
+  "tags": [
+    {
+      "name": "item"
+    }
+  ],
+  "info": {
+    "title": "Item",
+    "version": "1.0",
+    "description": "item (POI) CRUD api",
+    "contact": {
+      "name": "phsu",
+      "email": "phsu@aotter.net"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/item/list": {
+      "get": {
+        "summary": "get public item list",
+        "tags": [
+          "item"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ItemListResponseVO"
+          }
+        },
+        "operationId": "get-item-list",
+        "description": "public api for item list",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/brand"
+          },
+          {
+            "$ref": "#/components/parameters/category"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "example": 2019
+            },
+            "in": "query",
+            "name": "year",
+            "description": "year of product release"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rating",
+                "comment_count",
+                "pageview"
+              ],
+              "example": "rating"
+            },
+            "in": "query",
+            "name": "sortby",
+            "description": "sorting strategy"
+          }
+        ]
+      }
+    },
+    "/item/{itemId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/itemId"
+        }
+      ],
+      "get": {
+        "summary": "get single item with details",
+        "tags": [
+          "item"
+        ],
+        "operationId": "get-item-itemId",
+        "description": "get item by id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ItemVO_V1"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BaseListResponseVO_V1": {
+        "title": "BaseListResponseVO",
+        "type": "object",
+        "x-tags": [
+          "core"
+        ],
+        "properties": {
+          "prev": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string"
+          },
+          "prevCount": {
+            "type": "integer",
+            "minimum": 0,
+            "example": 0
+          },
+          "nextCount": {
+            "type": "integer",
+            "example": 23,
+            "minimum": 0
+          },
+          "total": {
+            "type": "integer",
+            "example": 353,
+            "minimum": 0
+          }
+        }
+      },
+      "Brand_V1": {
+        "title": "Brand",
+        "type": "object",
+        "x-tags": [
+          "core"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "example": "華碩",
+            "description": "廠牌顯示名稱 e.g. 華碩"
+          },
+          "vanity": {
+            "type": "string",
+            "example": "asus",
+            "description": "廠牌標準名稱（可用於網址列中） e.g. asus"
+          }
+        }
+      },
+      "CategoryVO_V1": {
+        "title": "CategoryVO",
+        "type": "object",
+        "x-tags": [
+          "core"
+        ],
+        "properties": {
+          "vanity": {
+            "type": "string",
+            "description": "分類標準名稱（可用於網址列中） e.g. phone",
+            "pattern": "^[a-z]",
+            "example": "phone"
+          },
+          "label": {
+            "type": "string",
+            "description": "分類顯示名 e.g. 手機"
+          }
+        }
+      },
+      "ItemListVO_V1": {
+        "title": "ItemListVO",
+        "type": "object",
+        "x-tags": [
+          "item"
+        ],
+        "description": "",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CategoryVO_V1"
+          },
+          "brand": {
+            "$ref": "#/components/schemas/Brand_V1"
+          },
+          "label": {
+            "type": "string",
+            "description": "產品顯示名稱 e.g. iphone 12 pro"
+          },
+          "summary": {
+            "type": "string",
+            "description": "簡介"
+          },
+          "tags": {
+            "type": "array",
+            "description": "hashtags",
+            "items": {
+              "type": "string"
+            }
+          },
+          "coverImg": {
+            "type": "string",
+            "format": "uri",
+            "description": "代表圖"
+          },
+          "rating": {
+            "type": "object",
+            "properties": {
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "評論數"
+              },
+              "average": {
+                "type": "number",
+                "example": 4.5,
+                "minimum": 0,
+                "description": "社群分數"
+              }
+            }
+          },
+          "vanity": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]",
+            "description": "產品的 SPU（可用於網址列中），例如 iphone-12-pro",
+            "example": "iphone-12-pro"
+          }
+        }
+      },
+      "ItemVO_V1": {
+        "title": "ItemVO",
+        "x-tags": [
+          "item"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ItemListVO_V1"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "score": {
+                "type": "number",
+                "minimum": 0,
+                "description": "評測分數"
+              },
+              "likeCount": {
+                "type": "integer",
+                "description": "按讚數"
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "alt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "specs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "vanity": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9-]",
+                      "example": "color",
+                      "description": "這個規格的標準名稱 e.g. color"
+                    },
+                    "label": {
+                      "type": "string",
+                      "example": "顏色",
+                      "description": "規格的顯示名 e.g. 顏色"
+                    },
+                    "values": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "description": "規格內容 e.g. ['紅','白']",
+                      "items": {
+                        "type": "string",
+                        "example": "紅"
+                      }
+                    }
+                  }
+                }
+              },
+              "pros": {
+                "type": "array",
+                "description": "優點列表",
+                "items": {
+                  "$ref": "#/components/schemas/ProsAndCons_V1"
+                }
+              },
+              "cons": {
+                "type": "array",
+                "description": "缺點列表",
+                "items": {
+                  "$ref": "#/components/schemas/ProsAndCons_V1"
+                }
+              }
+            }
+          }
+        ],
+        "x-examples": {},
+        "description": "完整的商品 POI 資料"
+      },
+      "ProsAndCons_V1": {
+        "title": "ProsAndCons",
+        "type": "object",
+        "x-tags": [
+          "item"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "項目內容 e.g. 防潑水/不支援 5G 等"
+          },
+          "count": {
+            "type": "integer",
+            "description": "認同本項目的投票數（排序用）",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "securitySchemes": {},
+    "parameters": {
+      "brand": {
+        "name": "brand",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "asus"
+        },
+        "description": "vanity of brand"
+      },
+      "category": {
+        "name": "category",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "phone"
+        },
+        "description": "vanity of category"
+      },
+      "search": {
+        "name": "search",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "search keywords"
+      },
+      "itemId": {
+        "name": "itemId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "商品的 id"
+      }
+    },
+    "responses": {
+      "ItemListResponseVO": {
+        "description": "Example response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/BaseListResponseVO_V1"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "list": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ItemListVO_V1"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
