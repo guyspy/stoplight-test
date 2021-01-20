@@ -81,18 +81,7 @@
         "description": "get item by id",
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/ItemVO_V1"
-                    }
-                  ]
-                }
-              }
-            }
+            "$ref": "#/components/responses/ItemResponseVO"
           }
         }
       }
@@ -183,10 +172,30 @@
             "type": "string"
           },
           "category": {
-            "$ref": "#/components/schemas/CategoryVO_V1"
+            "type": "object",
+            "properties": {
+              "vanity": {
+                "type": "string",
+                "description": "分類標準名稱（可用於網址列中） e.g. phone"
+              },
+              "label": {
+                "type": "string",
+                "description": "分類顯示名 e.g. 手機"
+              }
+            }
           },
           "brand": {
-            "$ref": "#/components/schemas/Brand_V1"
+            "type": "object",
+            "properties": {
+              "vanity": {
+                "type": "string",
+                "description": "廠牌標準名稱（可用於網址列中） e.g. asus"
+              },
+              "label": {
+                "type": "string",
+                "description": "廠牌顯示名稱 e.g. 華碩"
+              }
+            }
           },
           "label": {
             "type": "string",
@@ -233,104 +242,176 @@
         }
       },
       "ItemVO_V1": {
-        "title": "ItemVO",
-        "x-tags": [
-          "item"
-        ],
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/ItemListVO_V1"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "score": {
-                "type": "number",
-                "minimum": 0,
-                "description": "評測分數"
-              },
-              "likeCount": {
-                "type": "integer",
-                "description": "按讚數"
-              },
-              "images": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "url": {
-                      "type": "string",
-                      "format": "uri"
-                    },
-                    "alt": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "specs": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "vanity": {
-                      "type": "string",
-                      "pattern": "^[a-z0-9-]",
-                      "example": "color",
-                      "description": "這個規格的標準名稱 e.g. color"
-                    },
-                    "label": {
-                      "type": "string",
-                      "example": "顏色",
-                      "description": "規格的顯示名 e.g. 顏色"
-                    },
-                    "values": {
-                      "type": "array",
-                      "uniqueItems": true,
-                      "description": "規格內容 e.g. ['紅','白']",
-                      "items": {
-                        "type": "string",
-                        "example": "紅"
-                      }
-                    }
-                  }
-                }
-              },
-              "pros": {
-                "type": "array",
-                "description": "優點列表",
-                "items": {
-                  "$ref": "#/components/schemas/ProsAndCons_V1"
-                }
-              },
-              "cons": {
-                "type": "array",
-                "description": "缺點列表",
-                "items": {
-                  "$ref": "#/components/schemas/ProsAndCons_V1"
-                }
-              }
-            }
-          }
-        ],
-        "x-examples": {},
-        "description": "完整的商品 POI 資料"
-      },
-      "ProsAndCons_V1": {
-        "title": "ProsAndCons",
+        "title": "ItemVO2",
         "type": "object",
         "x-tags": [
           "item"
         ],
         "properties": {
+          "id": {
+            "type": "string"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CategoryVO_V1"
+          },
+          "brand": {
+            "$ref": "#/components/schemas/Brand_V1"
+          },
           "label": {
             "type": "string",
-            "description": "項目內容 e.g. 防潑水/不支援 5G 等"
+            "description": "產品顯示名稱 e.g. iphone 12 pro"
           },
-          "count": {
+          "summary": {
+            "type": "string",
+            "description": "簡介"
+          },
+          "tags": {
+            "type": "array",
+            "description": "hashtags",
+            "items": {
+              "type": "string"
+            }
+          },
+          "coverImg": {
+            "type": "string",
+            "format": "uri",
+            "description": "代表圖"
+          },
+          "rating": {
+            "type": "object",
+            "properties": {
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "評論數"
+              },
+              "average": {
+                "type": "number",
+                "example": 4.5,
+                "minimum": 0,
+                "description": "社群分數"
+              }
+            }
+          },
+          "vanity": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]",
+            "description": "產品的 SPU（可用於網址列中），例如 iphone-12-pro",
+            "example": "iphone-12-pro"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "description": "評測分數"
+          },
+          "likeCount": {
             "type": "integer",
-            "description": "認同本項目的投票數（排序用）",
-            "minimum": 0
+            "description": "按讚數"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "alt": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "specs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "vanity": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9-]",
+                  "example": "color",
+                  "description": "這個規格的標準名稱 e.g. color"
+                },
+                "label": {
+                  "type": "string",
+                  "example": "顏色",
+                  "description": "規格的顯示名 e.g. 顏色"
+                },
+                "values": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "description": "規格內容 e.g. ['紅','白']",
+                  "items": {
+                    "type": "string",
+                    "example": "紅"
+                  }
+                }
+              }
+            }
+          },
+          "pros": {
+            "type": "array",
+            "description": "優點列表",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "項目內容 e.g. 防潑水"
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "認同本項目的投票數（排序用）"
+                }
+              }
+            }
+          },
+          "cons": {
+            "type": "array",
+            "description": "缺點列表",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "項目內容 e.g. 不支援 5G 等"
+                },
+                "count": {
+                  "type": "integer",
+                  "description": "認同本項目的投票數（排序用）"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostVO_V1": {
+        "title": "PostVO",
+        "type": "object",
+        "x-tags": [
+          "item"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "文章標題"
+          },
+          "url": {
+            "type": "string",
+            "description": "文章網址",
+            "format": "uri"
+          },
+          "media": {
+            "type": "string",
+            "description": "媒體來源 e.g. 電獺少女"
+          },
+          "coverImg": {
+            "type": "string",
+            "description": "文章縮圖",
+            "format": "uri"
           }
         }
       }
@@ -398,6 +479,130 @@
                   }
                 }
               ]
+            },
+            "examples": {
+              "example-1": {
+                "value": {
+                  "prev": "string",
+                  "next": "string",
+                  "prevCount": 0,
+                  "nextCount": 23,
+                  "total": 353,
+                  "list": [
+                    {
+                      "id": "string",
+                      "category": {
+                        "vanity": "string",
+                        "label": "string"
+                      },
+                      "brand": {
+                        "vanity": "string",
+                        "label": "string"
+                      },
+                      "label": "string",
+                      "summary": "string",
+                      "tags": [
+                        "string"
+                      ],
+                      "coverImg": "http://example.com",
+                      "rating": {
+                        "count": 0,
+                        "average": 4.5
+                      },
+                      "vanity": "iphone-12-pro"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "ItemResponseVO": {
+        "description": "Example response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ItemVO_V1"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "related_posts": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PostVO_V1"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "examples": {
+              "example-1": {
+                "value": {
+                  "id": "string",
+                  "category": {
+                    "vanity": "phone",
+                    "label": "string"
+                  },
+                  "brand": {
+                    "id": "string",
+                    "name": "華碩",
+                    "vanity": "asus"
+                  },
+                  "label": "string",
+                  "summary": "string",
+                  "tags": [
+                    "string"
+                  ],
+                  "coverImg": "http://example.com",
+                  "rating": {
+                    "count": 0,
+                    "average": 4.5
+                  },
+                  "vanity": "iphone-12-pro",
+                  "score": 0,
+                  "likeCount": 0,
+                  "images": [
+                    {
+                      "url": "http://example.com",
+                      "alt": "string"
+                    }
+                  ],
+                  "specs": [
+                    {
+                      "vanity": "color",
+                      "label": "顏色",
+                      "values": [
+                        "紅"
+                      ]
+                    }
+                  ],
+                  "pros": [
+                    {
+                      "label": "string",
+                      "count": 0
+                    }
+                  ],
+                  "cons": [
+                    {
+                      "label": "string",
+                      "count": 0
+                    }
+                  ],
+                  "related_posts": [
+                    {
+                      "title": "string",
+                      "url": "http://example.com",
+                      "media": "string",
+                      "coverImg": "http://example.com"
+                    }
+                  ]
+                }
+              }
             }
           }
         }
