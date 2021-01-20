@@ -42,26 +42,26 @@
           },
           {
             "schema": {
-              "type": "integer",
+              "type": "string",
               "example": 2019
             },
             "in": "query",
             "name": "year",
-            "description": "year of product release"
+            "description": "出場年。可 , 隔開多組"
           },
           {
             "schema": {
               "type": "string",
               "enum": [
                 "rating",
-                "comment_count",
-                "pageview"
+                "pageview",
+                "comment_count"
               ],
               "example": "rating"
             },
             "in": "query",
             "name": "sortby",
-            "description": "sorting strategy"
+            "description": "排序依照 人氣（rating），熱門（pageview）或討論（comment_count）"
           }
         ]
       }
@@ -424,9 +424,9 @@
         "required": false,
         "schema": {
           "type": "string",
-          "example": "asus"
+          "example": "asus,apple"
         },
-        "description": "vanity of brand"
+        "description": "廠牌標準名稱 可 , 隔開多組"
       },
       "category": {
         "name": "category",
@@ -436,7 +436,7 @@
           "type": "string",
           "example": "phone"
         },
-        "description": "vanity of category"
+        "description": "分類標準名稱。可 , 隔開多組"
       },
       "search": {
         "name": "search",
@@ -532,78 +532,23 @@
                   "properties": {
                     "related_posts": {
                       "type": "array",
+                      "description": "敗家分享",
                       "items": {
                         "$ref": "#/components/schemas/PostVO_V1"
+                      }
+                    },
+                    "related_items": {
+                      "type": "array",
+                      "description": "你可能有興趣",
+                      "items": {
+                        "$ref": "#/components/schemas/ItemListVO_V1"
                       }
                     }
                   }
                 }
               ]
             },
-            "examples": {
-              "example-1": {
-                "value": {
-                  "id": "string",
-                  "category": {
-                    "vanity": "phone",
-                    "label": "string"
-                  },
-                  "brand": {
-                    "id": "string",
-                    "name": "華碩",
-                    "vanity": "asus"
-                  },
-                  "label": "string",
-                  "summary": "string",
-                  "tags": [
-                    "string"
-                  ],
-                  "coverImg": "http://example.com",
-                  "rating": {
-                    "count": 0,
-                    "average": 4.5
-                  },
-                  "vanity": "iphone-12-pro",
-                  "score": 0,
-                  "likeCount": 0,
-                  "images": [
-                    {
-                      "url": "http://example.com",
-                      "alt": "string"
-                    }
-                  ],
-                  "specs": [
-                    {
-                      "vanity": "color",
-                      "label": "顏色",
-                      "values": [
-                        "紅"
-                      ]
-                    }
-                  ],
-                  "pros": [
-                    {
-                      "label": "string",
-                      "count": 0
-                    }
-                  ],
-                  "cons": [
-                    {
-                      "label": "string",
-                      "count": 0
-                    }
-                  ],
-                  "related_posts": [
-                    {
-                      "title": "string",
-                      "url": "http://example.com",
-                      "media": "string",
-                      "coverImg": "http://example.com"
-                    }
-                  ]
-                }
-              }
-            }
+            "examples": {}
           }
         }
       }
